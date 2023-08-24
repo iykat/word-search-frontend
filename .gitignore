@@ -1,0 +1,12 @@
+# Ignore all files with the exe extension
+*.exe 
+
+# Ignore dist & converage folders
+dist/
+converage/
+
+# Nested location
+node_modules
+
+# Complex name pattern
+build-config.*.yml
