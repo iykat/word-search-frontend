@@ -1,5 +1,6 @@
 # Ignore all files with the exe extension
 *.exe 
+.cache
 
 # Ignore dist & converage folders
 dist/
