@@ -1,4 +1,7 @@
 export class Grid {
+  constructor() {
+    this.wordSelectMode = false;
+  };
   renderGrid(gridSize, wordGrid) {
     const gridArea = document.getElementsByClassName("grid-area")[0]
     if (gridArea.lastChild) {
@@ -12,10 +15,9 @@ export class Grid {
         const row = document.createElement("tr");
     
         for (let j = 0; j < gridSize; j++) {
-          
           const cell = document.createElement("td");
           let letter = wordGrid[index++]
-          const cellText = document.createTextNode(wordGrid[index++]);
+          const cellText = document.createTextNode(letter);
           cell.appendChild(cellText);
           cell.setAttribute("data-x", i)
           cell.setAttribute("data-y", j)
@@ -29,9 +31,19 @@ export class Grid {
       tbl.appendChild(tblBody);
       gridArea.appendChild(tbl);
 
+      // click handlers
       gridArea.addEventListener("mousedown", (event) => {
-        console.log(event.target)
+        this.wordSelectMode = true 
       })
+      gridArea.addEventListener("mousemove", (event) => {
+        if (this.wordSelectMode) {
+          event.target.classList.add("selected")
+        }
+      })
+      gridArea.addEventListener("mouseup", (event) => {
+        this.wordSelectMode = false 
+      })
+
     }
     
 }
