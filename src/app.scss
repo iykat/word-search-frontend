@@ -2,13 +2,22 @@
   font-family: sans-serif;
 }
 
+.header {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  text-align: center;
+  margin-inline: auto ;
+}
 .grid-area {
+  margin-top: 30px;
   table {
     max-width: 700px;
     margin: auto;
     user-select: none;
     td {
-      margin-bottom: 15px;
+      width: 20px;
+      height: 20px;
     }
   }
  

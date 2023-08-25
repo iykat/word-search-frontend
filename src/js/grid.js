@@ -24,7 +24,6 @@ export class Grid {
     
       tbl.appendChild(tblBody);
       gridArea.appendChild(tbl);
-      tbl.setAttribute("border", "2");
     }
     
 }
