@@ -14,8 +14,12 @@ export class Grid {
         for (let j = 0; j < gridSize; j++) {
           
           const cell = document.createElement("td");
+          let letter = wordGrid[index++]
           const cellText = document.createTextNode(wordGrid[index++]);
           cell.appendChild(cellText);
+          cell.setAttribute("data-x", i)
+          cell.setAttribute("data-y", j)
+          cell.setAttribute("data-letter", letter)
           row.appendChild(cell);
         }
     
@@ -24,6 +28,10 @@ export class Grid {
     
       tbl.appendChild(tblBody);
       gridArea.appendChild(tbl);
+
+      gridArea.addEventListener("mousedown", (event) => {
+        console.log(event.target)
+      })
     }
     
 }
