@@ -49,13 +49,13 @@ export class Grid {
             this.selectedItems[this.selectedItems.length - 1];
           if (lastSelectedItem.x === x && lastSelectedItem.y === y) return;
         }
-        this.selectedItems.push(cell, x, y, letter);
+        this.selectedItems.push({cell, x, y, letter});
       }
     });
 
     gridArea.addEventListener("mouseup", (event) => {
       this.wordSelectMode = false;
-      this.selectedItems.forEach((item) => item.classList.remove("selected"));
+      this.selectedItems.forEach((item) => item.cell.classList.remove("selected"));
     });
   }
 }
