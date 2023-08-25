@@ -36,6 +36,7 @@ export class Grid {
     gridArea.addEventListener("mousedown", (event) => {
       this.wordSelectMode = true;
     });
+    
     gridArea.addEventListener("mousemove", (event) => {
       if (this.wordSelectMode) {
         const cell = event.target;
@@ -51,9 +52,11 @@ export class Grid {
         this.selectedItems.push(cell, x, y, letter);
       }
     });
+
     gridArea.addEventListener("mouseup", (event) => {
       this.wordSelectMode = false;
       this.selectedItems.forEach((item) => item.classList.remove("selected"));
     });
   }
 }
+ 
