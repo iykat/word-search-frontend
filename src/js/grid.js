@@ -4,18 +4,39 @@ export class Grid {
     this.selectedItems = [];
     this.firstSelectedItem;
     this.gridArea = null;
+    this.words = [];
   }
 
   getCellsInRange(firstLetter, currentLetter) {
     let cellsInRange = [];
+    if (firstLetter.x > currentLetter.x || firstLetter.y > currentLetter.y) {
+      [currentLetter, firstLetter] = [firstLetter, currentLetter];
+    }
     if (firstLetter.y === currentLetter.y) {
-      if (firstLetter.x > currentLetter.x) {
-        [currentLetter, firstLetter] = [firstLetter, currentLetter];
-      }
       for (let i = firstLetter.x; i <= currentLetter.x; i++) {
         cellsInRange.push(
           this.gridArea.querySelector(
             `td[data-x="${i}"][data-y="${currentLetter.y}"]`
+          )
+        );
+      }
+    } else if (firstLetter.x === currentLetter.x) {
+      for (let i = firstLetter.y; i <= currentLetter.y; i++) {
+        cellsInRange.push(
+          this.gridArea.querySelector(
+            `td[data-x="${currentLetter.x}"][data-y="${i}"]`
+          )
+        );
+      }
+    } else if (
+      currentLetter.y - firstLetter.y ===
+      currentLetter.x - firstLetter.x
+    ) {
+      let delta = currentLetter.y - firstLetter.y;
+      for (let i = 0; i <= delta; i++) {
+        cellsInRange.push(
+          this.gridArea.querySelector(
+            `td[data-x="${firstLetter.x + i}"][data-y="${firstLetter.y + i}"]`
           )
         );
       }
@@ -72,27 +93,25 @@ export class Grid {
     gridArea.addEventListener("mousemove", (event) => {
       if (this.wordSelectMode) {
         const cell = event.target;
-        // cell.classList.add("selected");
         let x = +cell.getAttribute("data-x");
         let y = +cell.getAttribute("data-y");
         let letter = cell.getAttribute("data-letter");
-        // if (this.selectedItems.length > 0) {
-        //   const lastSelectedItem =
-        //     this.selectedItems[this.selectedItems.length - 1];
-        //   if (lastSelectedItem.x === x && lastSelectedItem.y === y) return;
-        // }
-        // this.selectedItems.push({cell, x, y, letter});
-        this.getCellsInRange(this.firstSelectedItem, { x, y }).forEach((cell) =>
-          cell.classList.add("selected")
-        );
+        this.selectedItems.forEach((cell) => cell.classList.remove("selected"));
+        this.selectedItems = this.getCellsInRange(this.firstSelectedItem, {
+          x,
+          y,
+        });
+        this.selectedItems.forEach((cell) => cell.classList.add("selected"));
       }
     });
 
     gridArea.addEventListener("mouseup", (event) => {
       this.wordSelectMode = false;
-      this.selectedItems.forEach((item) =>
-        item.cell.classList.remove("selected")
-      );
+      const selectedWord = this.selectedItems.reduce((word, cell) => {
+        word += cell.getAttribute("data-letter");
+      }, "");
+      console.log(selectedWord);
+      this.selectedItems.forEach((item) => item.classList.remove("selected"));
     });
   }
 }

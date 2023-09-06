@@ -5,8 +5,8 @@ const grid = new Grid();
 
 submitWordBtn.addEventListener("click", async() => {
   let result = await fetchGridInfo(["ONE", "TWO"]);
+  grid.words = ["ONE", "TWO"]
   grid.renderGrid(GRID_SIZE, result)
-  console.log(result)
 })
 
 async function fetchGridInfo(wordList){
