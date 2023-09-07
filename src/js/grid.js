@@ -110,16 +110,14 @@ export class Grid {
         ''
       );
       const reversedSelectedWord = selectedWord.split('').reverse().join('');
-      if (
-        this.words.indexOf(selectedWord) !== -1 ||
-        this.words.indexOf(reversedSelectedWord) !== -1
-      ) {
+      if (this.words.indexOf(selectedWord) !== -1) {
+        this.foundWords.push(selectedWord);
+      } else if (this.words.indexOf(reversedSelectedWord) !== -1) {
         this.foundWords.push(reversedSelectedWord);
       } else {
         this.selectedItems.forEach((item) => item.classList.remove('selected'));
       }
       this.selectedItems = [];
-      console.log(this.foundWords);
     });
   }
 }
