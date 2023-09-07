@@ -5,6 +5,7 @@ export class Grid {
     this.firstSelectedItem;
     this.gridArea = null;
     this.words = [];
+    this.foundWords = [];
   }
 
   getCellsInRange(firstLetter, currentLetter) {
@@ -45,26 +46,26 @@ export class Grid {
   }
 
   renderGrid(gridSize, wordGrid) {
-    const gridArea = document.getElementsByClassName("grid-area")[0];
+    const gridArea = document.getElementsByClassName('grid-area')[0];
     if (gridArea.lastChild) {
       gridArea.removeChild(gridArea.lastChild);
     }
     this.gridArea = gridArea;
-    const tbl = document.createElement("table");
-    const tblBody = document.createElement("tbody");
+    const tbl = document.createElement('table');
+    const tblBody = document.createElement('tbody');
     let index = 0;
 
     for (let i = 0; i < gridSize; i++) {
-      const row = document.createElement("tr");
+      const row = document.createElement('tr');
 
       for (let j = 0; j < gridSize; j++) {
-        const cell = document.createElement("td");
+        const cell = document.createElement('td');
         let letter = wordGrid[index++];
         const cellText = document.createTextNode(letter);
         cell.appendChild(cellText);
-        cell.setAttribute("data-x", i);
-        cell.setAttribute("data-y", j);
-        cell.setAttribute("data-letter", letter);
+        cell.setAttribute('data-x', i);
+        cell.setAttribute('data-y', j);
+        cell.setAttribute('data-letter', letter);
         row.appendChild(cell);
       }
 
@@ -75,35 +76,50 @@ export class Grid {
     gridArea.appendChild(tbl);
 
     // click handlers
-    gridArea.addEventListener("mousedown", (event) => {
+    tbl.addEventListener('mousedown', (event) => {
       this.wordSelectMode = true;
       const cell = event.target;
-      let x = +cell.getAttribute("data-x");
-      let y = +cell.getAttribute("data-y");
-      let letter = cell.getAttribute("data-letter");
+      let x = +cell.getAttribute('data-x');
+      let y = +cell.getAttribute('data-y');
+      let letter = cell.getAttribute('data-letter');
       this.firstSelectedItem = {
         x,
-        y,
+        y
       };
     });
 
-    gridArea.addEventListener("mousemove", (event) => {
+    tbl.addEventListener('mousemove', (event) => {
       if (this.wordSelectMode) {
         const cell = event.target;
-        let x = +cell.getAttribute("data-x");
-        let y = +cell.getAttribute("data-y");
-        let letter = cell.getAttribute("data-letter");
-        this.selectedItems.forEach((cell) => cell.classList.remove("selected"));
-        this.selectedItems = this.getCellsInRange(this.firstSelectedItem, { x, y,});
-        this.selectedItems.forEach((cell) => cell.classList.add("selected"));
+        let x = +cell.getAttribute('data-x');
+        let y = +cell.getAttribute('data-y');
+        let letter = cell.getAttribute('data-letter');
+        this.selectedItems.forEach((cell) => cell.classList.remove('selected'));
+        this.selectedItems = this.getCellsInRange(this.firstSelectedItem, {
+          x,
+          y
+        });
+        this.selectedItems.forEach((cell) => cell.classList.add('selected'));
       }
     });
 
-    gridArea.addEventListener("mouseup", (event) => {
+    tbl.addEventListener('mouseup', (event) => {
       this.wordSelectMode = false;
-      const selectedWord = this.selectedItems.reduce((word, cell) => word += cell.getAttribute("data-letter"), '');
-      console.log(selectedWord);
-      this.selectedItems.forEach((item) => item.classList.remove("selected"));
+      const selectedWord = this.selectedItems.reduce(
+        (word, cell) => (word += cell.getAttribute('data-letter')),
+        ''
+      );
+      const reversedSelectedWord = selectedWord.split('').reverse().join('');
+      if (
+        this.words.indexOf(selectedWord) !== -1 ||
+        this.words.indexOf(reversedSelectedWord) !== -1
+      ) {
+        this.foundWords.push(reversedSelectedWord);
+      } else {
+        this.selectedItems.forEach((item) => item.classList.remove('selected'));
+      }
+      this.selectedItems = [];
+      console.log(this.foundWords);
     });
   }
 }
