@@ -78,15 +78,12 @@ export class Grid {
     gridArea.addEventListener("mousedown", (event) => {
       this.wordSelectMode = true;
       const cell = event.target;
-      cell.classList.add("selected");
       let x = +cell.getAttribute("data-x");
       let y = +cell.getAttribute("data-y");
       let letter = cell.getAttribute("data-letter");
       this.firstSelectedItem = {
         x,
         y,
-        letter,
-        cell,
       };
     });
 
@@ -97,19 +94,14 @@ export class Grid {
         let y = +cell.getAttribute("data-y");
         let letter = cell.getAttribute("data-letter");
         this.selectedItems.forEach((cell) => cell.classList.remove("selected"));
-        this.selectedItems = this.getCellsInRange(this.firstSelectedItem, {
-          x,
-          y,
-        });
+        this.selectedItems = this.getCellsInRange(this.firstSelectedItem, { x, y,});
         this.selectedItems.forEach((cell) => cell.classList.add("selected"));
       }
     });
 
     gridArea.addEventListener("mouseup", (event) => {
       this.wordSelectMode = false;
-      const selectedWord = this.selectedItems.reduce((word, cell) => {
-        word += cell.getAttribute("data-letter");
-      }, "");
+      const selectedWord = this.selectedItems.reduce((word, cell) => word += cell.getAttribute("data-letter"), '');
       console.log(selectedWord);
       this.selectedItems.forEach((item) => item.classList.remove("selected"));
     });
